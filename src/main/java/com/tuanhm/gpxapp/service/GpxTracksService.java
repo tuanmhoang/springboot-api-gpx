@@ -72,7 +72,7 @@ public class GpxTracksService implements TracksService {
 		});
 		trackDetailsDto.setWaypoints(waypointDtos);
 		
-		// TODO pare more informations such as routes, track segments, etc.
+		// TODO parse more informations such as routes, track segments, etc.
 
 		return trackDetailsDto;
 	}

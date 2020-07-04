@@ -2,7 +2,7 @@ package com.tuanhm.gpxapp.service;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.Date;
@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,10 +33,11 @@ import io.jenetics.jpx.WayPoint;
 @Service
 public class GpxFileService implements FileService<GPS> {
 
-	private static final String UPLOADED_RESOURCES_FOLDER = "uploaded-resources";
-
 	@Autowired
 	private GpsDao gpsDao;
+
+	@Autowired
+	private Environment env;
 
 	// TODO: handle multiple files upload
 	@Override
@@ -50,11 +52,11 @@ public class GpxFileService implements FileService<GPS> {
 			throw new GpsFileException(
 					"File extension is incorrect! Allowed extension is: " + Constant.VALID_FILE_EXTENSIONS.toString());
 
-		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-		String fileName = timestamp.toString().replace(":", "-") + multipartFile.getOriginalFilename();
-
-		File file = new File(this.getClass().getClassLoader().getResource(UPLOADED_RESOURCES_FOLDER).getPath(),
-				fileName);
+		Date date = new Date();
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss_");
+		String fileName = dateFormat.format(date) + multipartFile.getOriginalFilename();
+		String property = env.getProperty("app.upload.uploadedfolder");
+		File file = new File(property + fileName);
 		multipartFile.transferTo(file);
 
 		// save uploaded file to upload directory

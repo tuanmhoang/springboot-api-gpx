@@ -8,6 +8,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Repository;
 
 import com.tuanhm.gpxapp.entity.GPS;
@@ -17,6 +19,9 @@ public class GpsDaoCustomImpl implements GpsDaoCustom {
 	
 	@PersistenceContext
     private EntityManager entityManager;
+	
+    @Autowired
+    private Environment env;
 
 	@Override
 	public List<GPS> getLatestBasedOnMetadataTime(){
@@ -25,7 +30,9 @@ public class GpsDaoCustomImpl implements GpsDaoCustom {
 	    Root<GPS> root = criteriaQuery.from(GPS.class);
 	    criteriaQuery.select(root);
 	    criteriaQuery.orderBy(criteriaBuilder.desc(root.get("metadataTime")));
+	    
+	    String maxResults = env.getProperty("app.latest.query.maxresults");
 		
-		return entityManager.createQuery(criteriaQuery).setMaxResults(10).getResultList();
+		return entityManager.createQuery(criteriaQuery).setMaxResults(Integer.parseInt(maxResults)).getResultList();
 	}
 }
