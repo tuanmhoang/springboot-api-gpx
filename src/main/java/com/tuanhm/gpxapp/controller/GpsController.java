@@ -1,6 +1,7 @@
 package com.tuanhm.gpxapp.controller;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +45,12 @@ public class GpsController {
 	
 	@PostMapping(value = "/latest")
 	public List<TrackDto> getLatestTracks() {
-		return gpxTracksService.getLatestTracks();
+		try {
+			return gpxTracksService.getLatestTracks();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Collections.emptyList();
+		}
 	}
 	
 	

@@ -35,7 +35,7 @@ public class GpxTracksService implements TracksService {
 	private GpsDao gpsDao;
 
 	@Override
-	public List<TrackDto> getLatestTracks() {
+	public List<TrackDto> getLatestTracks() throws Exception{
 		List<GPS> latestGpsEntities = gpsDaoCustom.getLatestBasedOnMetadataTime();
 		Gson gson = new GsonBuilder().registerTypeAdapter(ZonedDateTime.class, new GsonUtcDateAdapter()).create();
 
