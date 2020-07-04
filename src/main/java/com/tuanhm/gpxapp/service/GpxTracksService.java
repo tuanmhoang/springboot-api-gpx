@@ -10,9 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -67,8 +65,6 @@ public class GpxTracksService implements TracksService {
 		// get waypopints
 		Type listType = new TypeToken<ArrayList<WayPoint>>(){}.getType();
 		List<WayPoint> waypoints = new Gson().fromJson(gps.getWaypoints(), listType);
-//		ObjectMapper mapper = new ObjectMapper();
-//		List<WayPoint> waypoints = mapper.readValue(gps.getWaypoints(), new TypeReference<List<WayPoint>>(){});
 		
 		List<WaypointDto> waypointDtos = new ArrayList<>();
 		waypoints.forEach(wp -> {
